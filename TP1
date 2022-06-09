@@ -1,0 +1,10 @@
+rebote(retardo, gain) = @(retardo) : * (gain);
+delaymono(retardo, gain) = +~rebote(retardo, gain) * bypass;
+retardoL = hslider("RetardoL", 0.0, 0, 44100, 50);
+retardoR = hslider("RetardoR", 0.0, 0, 44100, 50);
+gainL = hslider("RealimentacionL", 0.0, 0, 1, 0.001);
+gainR = hslider("RealimentacionR", 0.0, 0, 1, 0.001);
+master = hslider ("Master", 0, 0, 1, 0.01);
+process = delaymono(retardoL, gainL) * master, delaymono(retardoR, gainR) * master;
+bypass = byp * (-1) +1;
+byp = checkbox ("Bypass");
