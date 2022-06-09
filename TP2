@@ -1,0 +1,21 @@
+	
+import("stdfaust.lib");
+
+mute = byp * (-1) + 1; 
+byp = checkbox ("mute"); 
+
+parteDecimal(x) = x - int(x);
+fase(f) = f/ma.SR : (+ : parteDecimal) ~ _;
+ondaCuadrada(f) = ((fase(f) > ciclo) * 2) - 1;
+
+ciclo = cicloDeTrabajo; 
+
+cicloDeTrabajo = vslider ("Ciclo [style:knob]",0.01,0.01,0.99,0.01);
+frecuencia = vslider ("Frecuencia [style:knob]",50,50,2500,0.01); 
+volumen = hslider ("Master [style:knob]",0,0,1,0.01); 
+
+ondaDePulsos = ondaCuadrada(frecuencia) *volumen * mute;
+
+generadorDePulsos = hgroup("Generador de ondas de pulso",ondaDePulsos, ondaDePulsos);
+
+process = generadorDePulsos; 
