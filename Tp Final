@@ -25,15 +25,47 @@ sinteMono = hgroup("bombo", bombo);
 process = sinteMono, sinteMono;
 
 //Hi-Hat
-
+//Hi-Hat
 import("stdfaust.lib");
 
 
  frecuencia = nentry("freq", 440, 20, 20000, 1);
  velocity = nentry("gain", 1, 0, 1, 0.01);
  gateDeNotas = button("gate");
- 
- Según GENERAL MIDI, la percusión esta dividida por canales. 
+
+
+attack = vslider("Ataque (ms)[style:knob]", 1, 0.1, 1000, 1) / 1000;
+decay = vslider("Decaimiento (ms)[style:knob]", 100, 0, 1000, 1) / 1000;
+sustain = 0;
+release = 0;
+
+volumen = vslider("master", 0.5, 0, 1, 0.01);
+
+hihat = no.pink_noise* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen * condicional;
+
+sinteMono = hgroup("Hi-Hat", hihat);
+
+ingresoHiHat = ba.hz2midikey(frecuencia);
+
+condicional = ingresoHiHat==42;
+
+process = sinteMono,sinteMono;
+
+//Condicional
+import("stdfaust.lib");
+
+ frecuencia = nentry("freq", 440, 20, 20000, 1);
+ velocity = nentry("gain", 1, 0, 1, 0.01);
+ gateDeNotas = button("gate");
+
+
+nota = ba.hz2midikey(frecuencia);
+
+process = (nota==41)*gateDeNotas;
+
+
+-Observaciones última clase-
+Según GENERAL MIDI, la percusión esta dividida por canales. 
 
 Colocar REDO; HI HAT; BOMBO en canales distintos. 
 
@@ -47,19 +79,3 @@ Bombo(36)-Letra "A"
 Redo (38)-Letra "S"
 
 Probar así. Sino hacer un DSP por separado para cada uno. 
-
-
-attack = vslider("Ataque (ms)[style:knob]", 1, 0.1, 1000, 1) / 1000;
-decay = vslider("Decaimiento (ms)[style:knob]", 100, 0, 1000, 1) / 1000;
-sustain = 0;
-release = 0;
-
-volumen = vslider("master", 0.5, 0, 1, 0.01);
-
-hihat = no.pink_noise* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen;
-
-sinteMono = hgroup("Hi-Hat", hihat);
-
-
-
-process = sinteMono,sinteMono;
