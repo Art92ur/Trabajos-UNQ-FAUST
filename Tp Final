@@ -1,3 +1,5 @@
+//BOMBO
+
 import("stdfaust.lib");
 
 
@@ -21,3 +23,28 @@ bombo = ((os.sawtooth(frecuencia)*cdm)+ (os.square(frecuencia)*(1-cdm))) * en.ad
 sinteMono = hgroup("bombo", bombo);
 
 process = sinteMono, sinteMono;
+
+//Hi-Hat
+
+import("stdfaust.lib");
+
+
+ frecuencia = nentry("freq", 440, 20, 20000, 1);
+ velocity = nentry("gain", 1, 0, 1, 0.01);
+ gateDeNotas = button("gate");
+
+
+attack = vslider("Ataque (ms)[style:knob]", 1, 0.1, 1000, 1) / 1000;
+decay = vslider("Decaimiento (ms)[style:knob]", 100, 0, 1000, 1) / 1000;
+sustain = 0;
+release = 0;
+
+volumen = vslider("master", 0.5, 0, 1, 0.01);
+
+hihat = no.pink_noise* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen;
+
+sinteMono = hgroup("Hi-Hat", hihat);
+
+
+
+process = sinteMono,sinteMono;
