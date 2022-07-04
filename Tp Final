@@ -32,6 +32,21 @@ import("stdfaust.lib");
  frecuencia = nentry("freq", 440, 20, 20000, 1);
  velocity = nentry("gain", 1, 0, 1, 0.01);
  gateDeNotas = button("gate");
+ 
+ Según GENERAL MIDI, la percusión esta dividida por canales. 
+
+Colocar REDO; HI HAT; BOMBO en canales distintos. 
+
+Exportar como un VST para la muestra. 
+
+Armar condicional para ingresar Hi-Hat según regla de General MIDI (42)-Letra "T"
+
+Usar transformador de nota a midi y con un condicional elegir el oscilador del instrumento que corresponda. 
+
+Bombo(36)-Letra "A"
+Redo (38)-Letra "S"
+
+Probar así. Sino hacer un DSP por separado para cada uno. 
 
 
 attack = vslider("Ataque (ms)[style:knob]", 1, 0.1, 1000, 1) / 1000;
