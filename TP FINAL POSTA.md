@@ -12,7 +12,7 @@ decayRedo = 0.125;
 sustainRedo = 0.01;
 releaseRedo = 0.25;
 
-redo = no.pink_noise*  en.adsr(attackRedo, decayRedo, sustainRedo, releaseRedo, gateDeNotas) * velocity * volumen * condicionalRedo;
+redo = no.pink_noise*  en.adsr(attackRedo, decayRedo, sustainRedo, releaseRedo, gateDeNotas) * velocity * (volumen*2) * condicionalRedo;
 
 ingresoRedo = ba.hz2midikey(frecuencia);
 condicionalRedo = ingresoRedo==40;
@@ -47,7 +47,7 @@ sustainBombo2 = 0;
 releaseBombo2 = 0.050;
 
 
-bombo = os.osc(frecuencia)* en.adsr(attackBombo, decayBombo, sustainBombo, releaseBombo, gateDeNotas) * velocity * volumen* en.adsr(attackBombo2, decayBombo2, sustainBombo2, releaseBombo2, gateDeNotas)* condicionalBombo;
+bombo = os.osc(frecuencia)* en.adsr(attackBombo, decayBombo, sustainBombo, releaseBombo, gateDeNotas) * velocity * (volumen*2)* en.adsr(attackBombo2, decayBombo2, sustainBombo2, releaseBombo2, gateDeNotas)* condicionalBombo;
 
 
 ingresoBombo = ba.hz2midikey(frecuencia);
@@ -61,4 +61,3 @@ percusion8bit = sinteMono:>_;
 volumen = vslider("master", 0.5, 0, 1, 0.01);
 
 process = percusion8bit,percusion8bit;
-
