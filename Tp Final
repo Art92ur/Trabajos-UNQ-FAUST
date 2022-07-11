@@ -1,5 +1,5 @@
 import("stdfaust.lib");
- frecuencia = 59;
+ frecuencia = nentry("freq", 59, 59, 59, 1);
  velocity = nentry("gain", 1, 0, 1, 0.01);
  gateDeNotas = button("gate");
 
@@ -19,13 +19,17 @@ release2 = 0.050;
 
 volumen = vslider("master", 0.5, 0, 1, 0.01);
 
-bombo = os.osc(frecuencia)* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen*en.adsr(attack2, decay2, sustain2, release2, gateDeNotas) ;
+bombo = os.osc(frecuencia)* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen*en.adsr(attack2, decay2, sustain2, release2, gateDeNotas)* condicional;
 
 sinteMono = hgroup("Bombo", bombo);
 
+ingresoBombo = ba.hz2midikey(frecuencia);
+
+condicional = ingresoBombo==38;
+
 process = sinteMono, sinteMono;
 
-//Hi-Hat
+
 //Hi-Hat
 import("stdfaust.lib");
 
@@ -42,9 +46,15 @@ release = 0;
 
 volumen = vslider("master", 0.5, 0, 1, 0.01);
 
-hihat = no.pink_noise* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen * condicional;
+hihatCerrado = no.noise*  en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen * condicional;
 
-sinteMono = hgroup("Hi-Hat", hihat);
+sinteMono = hgroup("Hi-Hat", hihatCerrado);
+
+ingresoHiHat = ba.hz2midikey(frecuencia);
+
+condicional = ingresoHiHat==42;
+
+process = sinteMono,sinteMono;
 
 ingresoHiHat = ba.hz2midikey(frecuencia);
 
