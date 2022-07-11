@@ -1,19 +1,25 @@
-//BOMBO
-
 import("stdfaust.lib");
  frecuencia = 59;
  velocity = nentry("gain", 1, 0, 1, 0.01);
  gateDeNotas = button("gate");
 
-
+//envolvente 1
 attack = 0;
-decay = 0.25;
+decay = 1950;
 sustain = 0;
-release = 0.1;
+release = 0.001;
+
+
+//envolvente 2
+
+attack2 = 0.004;
+decay2 = 0.216;
+sustain2 = 0;
+release2 = 0.050;
 
 volumen = vslider("master", 0.5, 0, 1, 0.01);
 
-bombo = os.osc(frecuencia)* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen;
+bombo = os.osc(frecuencia)* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen*en.adsr(attack2, decay2, sustain2, release2, gateDeNotas) ;
 
 sinteMono = hgroup("Bombo", bombo);
 
