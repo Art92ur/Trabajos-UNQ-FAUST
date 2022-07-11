@@ -1,26 +1,21 @@
 //BOMBO
 
 import("stdfaust.lib");
-
-
- frecuencia = nentry("freq", 440, 20, 20000, 1);
+ frecuencia = 59;
  velocity = nentry("gain", 1, 0, 1, 0.01);
  gateDeNotas = button("gate");
 
 
-attack = vslider("Ataque (ms)[style:knob]", 1, 0.1, 1000, 1) / 1000;
-decay = vslider("Decaimiento (ms)[style:knob]", 100, 0, 1000, 1) / 1000;
+attack = 0;
+decay = 0.25;
 sustain = 0;
-release = 0;
+release = 0.1;
 
 volumen = vslider("master", 0.5, 0, 1, 0.01);
 
-controlDeMix = hslider("Sinusoide-Diente de Sierra",0.5,0,1,0.01);
-cdm = hgroup("-Control de mezcla-",controlDeMix);
+bombo = os.osc(frecuencia)* en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen;
 
-bombo = ((os.sawtooth(frecuencia)*cdm)+ (os.square(frecuencia)*(1-cdm))) * en.adsr(attack, decay, sustain, release, gateDeNotas) * velocity * volumen;
-
-sinteMono = hgroup("bombo", bombo);
+sinteMono = hgroup("Bombo", bombo);
 
 process = sinteMono, sinteMono;
 
